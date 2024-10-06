@@ -12,19 +12,19 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
 model User {
   id           Int    @id @default(autoincrement())
   name         String @default("Unknown") // Default value for existing rows
   email        String @unique
   password     String
   refreshToken String? @db.Text // Allow large refresh tokens
- subscription  Json?            // Store the subscription as JSON
+  subscription Json?            // Store the subscription as JSON
   favfoods     FavFood[]
   favgroceries FavGroceries[]
   favfoodplace FavFoodPlace[]
   favgrocer    FavGrocer[]
 }
-
 
 model FavFood {
   id      Int    @id @default(autoincrement())
@@ -63,11 +63,12 @@ enum Userroles {
 
 model Places {
   id        Int       @id @default(autoincrement())
-  name      String
+  name      String    @unique
   location  String
   type      String
   imagepath String
-  special   Special[]
+  specialsById   Special[] @relation("PlaceById")   // Relation by ID
+  specialsByName Special[] @relation("PlaceByName") // Relation by Name
 }
 
 model Special {
@@ -80,8 +81,10 @@ model Special {
   till      String
   before    Float
   after     Float
-  placesId  Int        // Declare the placesId field here
-  places    Places     @relation(fields: [placesId], references: [id])
+  placesId  Int
+  places    Places     @relation("PlaceById", fields: [placesId], references: [id]) // Relation by ID
+  PlaceName String
+  placeNa   Places     @relation("PlaceByName", fields: [PlaceName], references: [name]) // Relation by name
 }
 
 enum FoodOrGroc {

@@ -58,6 +58,7 @@ export async function POST(request: Request) {
         till: till!,
         before,
         after,
+        PlaceName: place.name,
         imagepath: `/uploads/${imageName}`,
         placesId: place.id,
       }

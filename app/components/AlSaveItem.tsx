@@ -1,14 +1,14 @@
-// AlSaveItem.tsx
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
 
 interface AlSaveItemProps {
-  name: string;
+  name: string;          // Special name
   type: string;
   place: string;
+  placename: string;
   foodorgroc: string;
-  before?: number; // Optional in case some items don't have a priceBefore
+  before?: number;       // Optional in case some items don't have a priceBefore
   after: number;
   from: string;
   till: string;
@@ -19,6 +19,7 @@ export default function AlSaveItem({
   name,
   type,
   place,
+  placename,
   before,
   after,
   till,
@@ -39,7 +40,7 @@ export default function AlSaveItem({
         />
       )}
       <div className="p-2">
-        <h3 className="text-lg font-semibold">{name}</h3>
+        <h3 className="text-lg font-semibold">{name}</h3> {/* Special name in the card */}
         <p className="text-sm text-gray-500">{type}</p>
         <p className="text-md font-medium">
           {before !== undefined && before !== after && (

@@ -6,7 +6,14 @@ const prisma = new PrismaClient();
 export async function GET() {
   // Fetch all specials with related place information
   const specials = await prisma.special.findMany({
-    include: { places: true }
+    include: { places: true } // Ensure the 'places' relation is fetched
   });
-  return NextResponse.json(specials);
+  
+  // Transform the data to include place name directly
+  const transformedSpecials = specials.map((special) => ({
+    ...special,
+    place: special.places.name,  // Assign place name from related 'Places'
+  }));
+
+  return NextResponse.json(transformedSpecials);
 }

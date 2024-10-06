@@ -1,4 +1,3 @@
-// ViewSpecials.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -9,7 +8,7 @@ import StoreScroller from '../components/StoreScroller';
 
 type Special = {
   id: number;
-  name: string;
+  name: string;         // Special name
   type: string;
   foodorgroc: string;
   from: string;
@@ -17,8 +16,7 @@ type Special = {
   before: number;
   after: number;
   imagepath: string;
-  place: string;
-  location: string;
+  place: string;        // Store or place name (now included from API)
 };
 
 export default function ViewSpecials() {
@@ -28,7 +26,7 @@ export default function ViewSpecials() {
 
   const filteredGroceries = specials.filter((special) =>
     special.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    special.place.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    special.place.toLowerCase().includes(searchTerm.toLowerCase()) ||  // Using place field
     special.type.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -39,16 +37,17 @@ export default function ViewSpecials() {
       .catch(error => console.error(error));
   }, []);
 
-  // Group specials by place
-  const specialsByPlace = specials.reduce((acc: any, special: Special) => {
-    const place = special.name;
+  // Group specials by place (store)
+  const specialsByPlace = filteredGroceries.reduce((acc: any, special: Special) => {
+    const place = special.place;  // Group by store name
     if (!acc[place]) {
       acc[place] = [];
     }
-    acc[place].push(special);
+    acc[place].push(special);  // Push specials under the store
     return acc;
   }, {});
 
+  // Sort specials within each store group
   Object.keys(specialsByPlace).forEach((place) => {
     specialsByPlace[place].sort((a: Special, b: Special) => {
       if (sortBy === "type") return a.type.localeCompare(b.type);
@@ -70,7 +69,7 @@ export default function ViewSpecials() {
 
       {/* Scrollable Grocery Lists by Store */}
       {Object.keys(specialsByPlace).map((place) => (
-        <StoreScroller key={place} place={place} specials={specialsByPlace[place]} />
+        <StoreScroller key={place} place={place} specials={specialsByPlace[place]} /> // Pass place to StoreScroller
       ))}
     </div>
   );
